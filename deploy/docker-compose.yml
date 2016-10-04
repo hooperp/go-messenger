@@ -2,8 +2,10 @@ vocalink-test-app-1:
     tty: true
     image: phooper0001/vocalink-test-app-1:0.1
     stdin_open: true
+    expose:
+      - 8081
     ports:
-    - "127.0.0.1:8081:8081"
+    - 8081:8081
     labels:
       io.rancher.container.pull_image: always
 vocalink-test-app-2:
