@@ -1,21 +1,31 @@
 Version=0.1
 RepositoryName=phooper0001
-AppName=vocalink-test-app-1
-ImageName=$RepositoryName/$AppName:$Version
+AppNames="vocalink-test-app-1 vocalink-test-app-2 vocalink-test-app-3"
 
 [ -z "$DOCKER_USERNAME" -o -z "$DOCKER_PASSWORD" ] && { echo "Please enter DOCKER_USERNAME and DOCKER_PASSWORD" ; exit 1 ; } 
 
-docker build --force-rm -t $ImageName .
-docker run -d -t $ImageName bash
+for AppName in $AppNames
+do
 
-ContainerId=$(docker ps | grep "$ImageName" | awk ' { print $1 } ' ) 
+    ImageName=$RepositoryName/$AppName:$Version
 
-echo "docker commit $ContainerId $ImageName"
-docker commit $ContainerId $ImageName
+    cd $AppName
 
-docker login --password $DOCKER_PASSWORD --username $DOCKER_USERNAME
+    docker build --force-rm -t $ImageName .
+    docker run -d -t $ImageName bash
 
-echo "docker push $ImageName"
-docker push $ImageName
+    ContainerId=$(docker ps | grep "$ImageName" | awk ' { print $1 } ' ) 
+
+    echo "docker commit $ContainerId $ImageName"
+    docker commit $ContainerId $ImageName
+    
+    docker login --password $DOCKER_PASSWORD --username $DOCKER_USERNAME
+    
+    echo "docker push $ImageName"
+    docker push $ImageName
+
+    cd - 
+
+done
 
 ./DockerDelete.sh

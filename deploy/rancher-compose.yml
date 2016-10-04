@@ -1,2 +1,6 @@
-test-app-1:
+vocalink-test-app-1:
+  scale: 1
+vocalink-test-app-2:
+  scale: 1
+vocalink-test-app-3:
   scale: 1
